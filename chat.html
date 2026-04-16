@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetSwipe - Community Q&A</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .page-title h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            color: #666;
+        }
+
+        .chat-card {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .chat-header-info h4 {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .chat-header-info span {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .chat-body {
+            padding: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+
+        .message-question {
+            background: #e3f2fd;
+            padding: 12px 16px;
+            border-radius: 15px 15px 15px 5px;
+            margin-bottom: 5px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .message-answer {
+            background: #e8f5e9;
+            padding: 12px 16px;
+            border-radius: 15px 15px 5px 15px;
+            margin-left: auto;
+            color: #333;
+            line-height: 1.5;
+            border-left: 4px solid #4ade80;
+        }
+
+        .expert-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #4ade80;
+            color: white;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stats span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .ask-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .ask-box h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .ask-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .ask-btn:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="logo">🐾 PetSwipe</a>
+        <a href="index.html" style="background:#f0f0f0; padding:10px 20px; border-radius:20px; text-decoration:none; color:#333;">← Back</a>
+    </div>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>💬 Community Q&A</h1>
+            <p>Real questions from future pet owners, answered by experts</p>
+        </div>
+
+        <div class="ask-box">
+            <h3>Have a question about pet care?</h3>
+            <button class="ask-btn" onclick="alert('In the full app, you could submit questions here!')">Ask a Question</button>
+        </div>
+
+        <!-- Chat 1 -->
+        <div class="chat-card">
+            <div class="chat-header">
+                <img src="images/cat1.jpg" alt="User">
+                <div class="chat-header-info">
+                    <h4>Sarah M.</h4>
+                    <span>First-time cat owner • 2 days ago</span>
+                </div>
+            </div>
+            <div class="chat-body">
+                <div class="message">
+                    <div class="message-question">
+                        "I just adopted a 3-month-old kitten. How often should I feed her? The shelter said 3 times a day but she always seems hungry!"
+                    </div>
+                </div>
+                <div class="message" style="margin-left: auto;">
+                    <div class="expert-badge">✓ Veterinarian</div>
+                    <div class="message-answer">
+                        <strong>Dr. Martinez:</strong> 3 times daily is perfect for a kitten! They're growing fast and need the calories. If she seems hungry, you can offer a bit more at each meal, but don't free-feed (leave food out all day). Stick to scheduled meals to prevent obesity later. Make sure you're feeding kitten-specific food - they need higher protein!
+                    </div>
+                </div>
+            </div>
+            <div class="stats">
+                <span>👍 24 helpful</span>
+                <span>💬 3 comments</span>
+                <span>👁️ 156 views</span>
+            </div>
+        </div>
+
+        <!-- Chat 2 -->
+        <div class="chat-card">
+            <div class="chat-header">
+                <img src="images/dog1.jpg" alt="User">
+                <div class="chat-header-info">
+                    <h4>Mike T.</h4>
+                    <span>Dog owner • 5 days ago</span>
+                </div>
+            </div>
+            <div class="chat-body">
+                <div class="message">
+                    <div class="message-question">
+                        "My rescue dog is terrified of car rides. He shakes and drools every time. Any tips for helping him overcome this? We need to drive to the vet next week."
+                    </div>
+                </div>
+                <div class="message" style="margin-left: auto;">
+                    <div class="expert-badge">✓ Dog Trainer</div>
+                    <div class="message-answer">
+                        <strong>Jessica K.:</strong> Start slow! Don't even turn the car on yet. Just sit in the car with treats and toys for 5 minutes daily. Next step: turn car on but don't move. Then short 1-minute drives around the block. Build up gradually. Use a calming supplement or pheromone spray. For the vet trip specifically, ask about medication to help with anxiety for that one trip while you work on long-term training.
+                    </div>
+                </div>
+            </div>
+            <div class="stats">
+                <span>👍 42 helpful</span>
+                <span>💬 7 comments</span>
+                <span>👁️ 289 views</span>
+            </div>
+        </div>
+
+        <!-- Chat 3 -->
+        <div class="chat-card">
+            <div class="chat-header">
+                <div style="width:40px; height:40px; border-radius:50%; background:#667eea; display:flex; align-items:center; justify-content:center; color:white; font-size:20px;">🐾</div>
+                <div class="chat-header-info">
+                    <h4>Anonymous</h4>
+                    <span>Future pet owner • 1 week ago</span>
+                </div>
+            </div>
+            <div class="chat-body">
+                <div class="message">
+                    <div class="message-question">
+                        "I work 9-5 in an office. Is it fair to get a dog if they'll be alone that long? I feel guilty but really want a companion."
+                    </div>
+                </div>
+                <div class="message" style="margin-left: auto;">
+                    <div class="expert-badge">✓ Animal Behaviorist</div>
+                    <div class="message-answer">
+                        <strong>Dr. Chen:</strong> It's possible with the right setup! Consider: 1) Adult dog (not puppy) who's used to being alone, 2) Dog walker midday or doggy daycare 2-3x/week, 3) Breed matters - some dogs handle solitude better (older Greyhounds, certain terriers), 4) Interactive toys and camera to check in. OR consider a bonded pair of cats - they're company for each other! Don't feel guilty if you can provide quality time mornings/evenings and meet their exercise needs.
+                    </div>
+                </div>
+            </div>
+            <div class="stats">
+                <span>👍 67 helpful</span>
+                <span>💬 12 comments</span>
+                <span>👁️ 534 views</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
