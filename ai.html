@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetSwipe - AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .chat-container {
+            flex: 1;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 70px);
+        }
+
+        .ai-intro {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-intro h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .ai-intro p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: white;
+            color: #333;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-message {
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .ai-avatar {
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .typing {
+            display: flex;
+            gap: 4px;
+            padding: 15px 20px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .input-area {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .input-area input {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-area input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover {
+            background: #5568d3;
+        }
+
+        .quick-questions {
+            display: flex;
+            gap: 10px;
+            padding: 10px 20px;
+            overflow-x: auto;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .quick-q {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .quick-q:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="logo">🐾 PetSwipe</a>
+        <a href="index.html" style="background:#f0f0f0; padding:10px 20px; border-radius:20px; text-decoration:none; color:#333;">← Back</a>
+    </div>
+
+    <div class="chat-container">
+        <div class="ai-intro">
+            <h2>🤖 Pet AI Assistant</h2>
+            <p>Ask me anything about pet care, training, or adoption!</p>
+        </div>
+
+        <div class="quick-questions">
+            <button class="quick-q" onclick="ask('How much exercise does a dog need?')">Exercise needs?</button>
+            <button class="quick-q" onclick="ask('What should I feed my cat?')">Cat food?</button>
+            <button class="quick-q" onclick="ask('How do I potty train a puppy?')">Potty training?</button>
+            <button class="quick-q" onclick="ask('Signs my pet is sick?')">Signs of illness?</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="ai-avatar">🤖</div>
+                <div>Hi! I'm your Pet AI Assistant. I can help with questions about dogs, cats, training, nutrition, and health. What would you like to know?</div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type your question..." onkeypress="if(event.key==='Enter')sendMessage()">
+            <button class="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        const responses = {
+            'walk': "Most dogs need 30-60 minutes of exercise daily. High-energy breeds like Border Collies need 2+ hours! Cats need play sessions too - aim for 15-20 minutes twice daily with interactive toys.",
+            'exercise': "Most dogs need 30-60 minutes of exercise daily. High-energy breeds like Border Collies need 2+ hours! Cats need play sessions too - aim for 15-20 minutes twice daily with interactive toys.",
+            'food': "Pets need age-appropriate nutrition! Puppies/kittens eat 3-4x daily, adults 2x. Look for AAFCO certification on labels. Avoid human food like chocolate, grapes, onions, and xylitol (artificial sweetener) - all toxic to pets!",
+            'eat': "Pets need age-appropriate nutrition! Puppies/kittens eat 3-4x daily, adults 2x. Look for AAFCO certification on labels. Avoid human food like chocolate, grapes, onions, and xylitol (artificial sweetener) - all toxic to pets!",
+            'vet': "If your pet shows unusual behavior, lethargy, vomiting/diarrhea (more than 24hrs), difficulty breathing, or won't eat/drink - contact a vet immediately. Annual checkups are essential for preventative care!",
+            'sick': "Warning signs: lethargy, loss of appetite, vomiting/diarrhea, excessive thirst, difficulty breathing, or behavior changes. When in doubt, call your vet - it's better to be safe!",
+            'train': "Consistency is key! Use positive reinforcement (treats, praise). Short 5-10 minute sessions work better than long ones. For dogs: start with sit, stay, come. For cats: focus on litter box and scratching post training.",
+            'behavior': "Consistency is key! Use positive reinforcement (treats, praise). Short 5-10 minute sessions work better than long ones. For dogs: start with sit, stay, come. For cats: focus on litter box and scratching post training.",
+            'potty': "For puppies: Take them out every 2 hours, after meals, and after naps. Praise immediately when they go outside. Accidents happen - don't punish, just clean thoroughly. Most dogs are house-trained by 4-6 months.",
+            'bathroom': "For puppies: Take them out every 2 hours, after meals, and after naps. Praise immediately when they go outside. Accidents happen - don't punish, just clean thoroughly. Most dogs are house-trained by 4-6 months.",
+            'adopt': "When adopting: 1) Consider your lifestyle (activity level, space), 2) Meet the pet multiple times if possible, 3) Ask about medical history and behavior, 4) Prepare your home beforehand, 5) Be patient - adjustment takes 3-6 months!",
+            'cost': "First year costs: Dog $1,000-2,000, Cat $800-1,500 (vet visits, spay/neuter, supplies). Annual costs after: $500-1,000 for food, vet care, and supplies. Emergency vet visits can be $500-5,000 - consider pet insurance!",
+            'groom': "Dogs: Brush weekly, bathe monthly (over-bathing dries skin). Nail trims every 2-4 weeks. Cats: Self-grooming but need brushing (especially long-haired), nail trims, and occasional baths if they get into something messy.",
+            'insurance': "Pet insurance typically costs $30-50/month for dogs, $15-25/month for cats. It covers accidents/illnesses but not routine care. Start when they're young for best rates. Read the fine print on pre-existing conditions!",
+            'introduce': "Introduce new pets slowly! Keep them separate for 3-7 days, let them smell each other's items first. First meetings: neutral territory, short duration, positive reinforcement. Don't force interactions - let them set the pace."
+        };
+
+        function ask(text) {
+            document.getElementById('userInput').value = text;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Show typing indicator
+            showTyping();
+
+            // Generate response with delay
+            setTimeout(() => {
+                hideTyping();
+                const response = generateResponse(message);
+                addMessage(response, 'ai');
+            }, 1500);
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `message ${sender}-message`;
+            
+            if (sender === 'ai') {
+                div.innerHTML = `<div class="ai-avatar">🤖</div><div>${text}</div>`;
+            } else {
+                div.textContent = text;
+            }
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showTyping() {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'message ai-message typing-indicator';
+            div.id = 'typing';
+            div.innerHTML = `
+                <div class="ai-avatar">🤖</div>
+                <div class="typing">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        function generateResponse(message) {
+            const lower = message.toLowerCase();
+            
+            // Check for keywords
+            for (let key in responses) {
+                if (lower.includes(key)) {
+                    return responses[key];
+                }
+            }
+
+            // Default responses
+            const defaults = [
+                "I can help with questions about exercise, food, training, vet care, grooming, costs, and adoption tips! What specifically would you like to know?",
+                "Great question! I know about dog and cat care, training techniques, nutrition, health signs, and adoption advice. What would you like to learn about?",
+                "I'm here to help with pet care advice! Try asking about: exercise needs, feeding, potty training, when to see a vet, or grooming tips."
+            ];
+            
+            return defaults[Math.floor(Math.random() * defaults.length)];
+        }
+    </script>
+</body>
+</html>
