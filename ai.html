@@ -17,6 +17,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding-bottom: 80px;
         }
 
         .header {
@@ -198,6 +199,39 @@
         .quick-q:hover {
             background: rgba(255,255,255,0.3);
         }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+            transition: color 0.3s;
+        }
+
+        .nav-item span {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: #4ade80;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -213,10 +247,10 @@
         </div>
 
         <div class="quick-questions">
-            <button class="quick-q" onclick="ask('How much exercise does a dog need?')">Exercise needs?</button>
+            <button class="quick-q" onclick="ask('How much exercise does a dog need?')">Exercise?</button>
             <button class="quick-q" onclick="ask('What should I feed my cat?')">Cat food?</button>
             <button class="quick-q" onclick="ask('How do I potty train a puppy?')">Potty training?</button>
-            <button class="quick-q" onclick="ask('Signs my pet is sick?')">Signs of illness?</button>
+            <button class="quick-q" onclick="ask('Signs my pet is sick?')">Illness?</button>
         </div>
 
         <div class="chat-messages" id="chatMessages">
@@ -232,23 +266,29 @@
         </div>
     </div>
 
+    <div class="bottom-nav">
+        <a href="quiz.html" class="nav-item"><span>🎯</span>Quiz</a>
+        <a href="app.html" class="nav-item"><span>🔥</span>Swipe</a>
+        <a href="ai.html" class="nav-item active"><span>🤖</span>AI</a>
+        <a href="chat.html" class="nav-item"><span>💬</span>Chat</a>
+    </div>
+
     <script>
         const responses = {
-            'walk': "Most dogs need 30-60 minutes of exercise daily. High-energy breeds like Border Collies need 2+ hours! Cats need play sessions too - aim for 15-20 minutes twice daily with interactive toys.",
-            'exercise': "Most dogs need 30-60 minutes of exercise daily. High-energy breeds like Border Collies need 2+ hours! Cats need play sessions too - aim for 15-20 minutes twice daily with interactive toys.",
-            'food': "Pets need age-appropriate nutrition! Puppies/kittens eat 3-4x daily, adults 2x. Look for AAFCO certification on labels. Avoid human food like chocolate, grapes, onions, and xylitol (artificial sweetener) - all toxic to pets!",
-            'eat': "Pets need age-appropriate nutrition! Puppies/kittens eat 3-4x daily, adults 2x. Look for AAFCO certification on labels. Avoid human food like chocolate, grapes, onions, and xylitol (artificial sweetener) - all toxic to pets!",
-            'vet': "If your pet shows unusual behavior, lethargy, vomiting/diarrhea (more than 24hrs), difficulty breathing, or won't eat/drink - contact a vet immediately. Annual checkups are essential for preventative care!",
-            'sick': "Warning signs: lethargy, loss of appetite, vomiting/diarrhea, excessive thirst, difficulty breathing, or behavior changes. When in doubt, call your vet - it's better to be safe!",
-            'train': "Consistency is key! Use positive reinforcement (treats, praise). Short 5-10 minute sessions work better than long ones. For dogs: start with sit, stay, come. For cats: focus on litter box and scratching post training.",
-            'behavior': "Consistency is key! Use positive reinforcement (treats, praise). Short 5-10 minute sessions work better than long ones. For dogs: start with sit, stay, come. For cats: focus on litter box and scratching post training.",
-            'potty': "For puppies: Take them out every 2 hours, after meals, and after naps. Praise immediately when they go outside. Accidents happen - don't punish, just clean thoroughly. Most dogs are house-trained by 4-6 months.",
-            'bathroom': "For puppies: Take them out every 2 hours, after meals, and after naps. Praise immediately when they go outside. Accidents happen - don't punish, just clean thoroughly. Most dogs are house-trained by 4-6 months.",
-            'adopt': "When adopting: 1) Consider your lifestyle (activity level, space), 2) Meet the pet multiple times if possible, 3) Ask about medical history and behavior, 4) Prepare your home beforehand, 5) Be patient - adjustment takes 3-6 months!",
-            'cost': "First year costs: Dog $1,000-2,000, Cat $800-1,500 (vet visits, spay/neuter, supplies). Annual costs after: $500-1,000 for food, vet care, and supplies. Emergency vet visits can be $500-5,000 - consider pet insurance!",
-            'groom': "Dogs: Brush weekly, bathe monthly (over-bathing dries skin). Nail trims every 2-4 weeks. Cats: Self-grooming but need brushing (especially long-haired), nail trims, and occasional baths if they get into something messy.",
-            'insurance': "Pet insurance typically costs $30-50/month for dogs, $15-25/month for cats. It covers accidents/illnesses but not routine care. Start when they're young for best rates. Read the fine print on pre-existing conditions!",
-            'introduce': "Introduce new pets slowly! Keep them separate for 3-7 days, let them smell each other's items first. First meetings: neutral territory, short duration, positive reinforcement. Don't force interactions - let them set the pace."
+            'walk': "Most dogs need 30-60 minutes of exercise daily. High-energy breeds like Border Collies need 2+ hours! Cats need play sessions too - aim for 15-20 minutes twice daily.",
+            'exercise': "Most dogs need 30-60 minutes of exercise daily. High-energy breeds like Border Collies need 2+ hours! Cats need play sessions too - aim for 15-20 minutes twice daily.",
+            'food': "Pets need age-appropriate nutrition! Puppies/kittens eat 3-4x daily, adults 2x. Look for AAFCO certification. Avoid chocolate, grapes, onions, and xylitol - all toxic to pets!",
+            'eat': "Pets need age-appropriate nutrition! Puppies/kittens eat 3-4x daily, adults 2x. Look for AAFCO certification. Avoid chocolate, grapes, onions, and xylitol - all toxic to pets!",
+            'vet': "If your pet shows unusual behavior, lethargy, vomiting/diarrhea (more than 24hrs), difficulty breathing, or won't eat/drink - contact a vet immediately.",
+            'sick': "Warning signs: lethargy, loss of appetite, vomiting/diarrhea, excessive thirst, difficulty breathing, or behavior changes. When in doubt, call your vet!",
+            'train': "Consistency is key! Use positive reinforcement (treats, praise). Short 5-10 minute sessions work better than long ones. Start with basic commands.",
+            'behavior': "Consistency is key! Use positive reinforcement (treats, praise). Short 5-10 minute sessions work better than long ones.",
+            'potty': "For puppies: Take them out every 2 hours, after meals, and after naps. Praise immediately when they go outside. Most dogs are house-trained by 4-6 months.",
+            'bathroom': "For puppies: Take them out every 2 hours, after meals, and after naps. Praise immediately when they go outside.",
+            'adopt': "When adopting: 1) Consider your lifestyle, 2) Meet the pet multiple times, 3) Ask about medical history, 4) Prepare your home, 5) Be patient - adjustment takes 3-6 months!",
+            'cost': "First year costs: Dog $1,000-2,000, Cat $800-1,500. Annual after: $500-1,000. Emergency vet visits can be $500-5,000 - consider pet insurance!",
+            'groom': "Dogs: Brush weekly, bathe monthly. Nail trims every 2-4 weeks. Cats: Self-grooming but need brushing and nail trims.",
+            'insurance': "Pet insurance typically costs $30-50/month for dogs, $15-25/month for cats. Start when they're young for best rates!"
         };
 
         function ask(text) {
@@ -261,14 +301,11 @@
             const message = input.value.trim();
             if (!message) return;
 
-            // Add user message
             addMessage(message, 'user');
             input.value = '';
 
-            // Show typing indicator
             showTyping();
 
-            // Generate response with delay
             setTimeout(() => {
                 hideTyping();
                 const response = generateResponse(message);
@@ -316,14 +353,12 @@
         function generateResponse(message) {
             const lower = message.toLowerCase();
             
-            // Check for keywords
             for (let key in responses) {
                 if (lower.includes(key)) {
                     return responses[key];
                 }
             }
 
-            // Default responses
             const defaults = [
                 "I can help with questions about exercise, food, training, vet care, grooming, costs, and adoption tips! What specifically would you like to know?",
                 "Great question! I know about dog and cat care, training techniques, nutrition, health signs, and adoption advice. What would you like to learn about?",
