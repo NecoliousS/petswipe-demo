@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetSwipe - Matching Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .option:hover {
+            background: #e0e7ff;
+            border-color: #667eea;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #667eea;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .match-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 3px solid #4ade80;
+        }
+
+        .match-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .match-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .match-reason {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="logo">🐾 PetSwipe</a>
+        <a href="index.html" class="nav-btn" style="background:#f0f0f0; padding:10px 20px; border-radius:20px; text-decoration:none; color:#333;">← Back</a>
+    </div>
+
+    <div class="container">
+        <div class="quiz-card" id="quizContainer">
+            <h1>🎯 Find Your Perfect Match</h1>
+            <p class="subtitle">Answer 5 quick questions to find your ideal pet</p>
+            
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div id="questionContainer">
+                <!-- Question 1 -->
+                <div class="question active" data-q="1">
+                    <h3>1. Do you have a yard or outdoor space?</h3>
+                    <div class="options">
+                        <button class="option" onclick="answer('yard', 'yes')">🏡 Yes, spacious yard</button>
+                        <button class="option" onclick="answer('yard', 'small')">🌱 Small patio/balcony</button>
+                        <button class="option" onclick="answer('yard', 'no')">🏢 No outdoor space</button>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question" data-q="2">
+                    <h3>2. How active are you?</h3>
+                    <div class="options">
+                        <button class="option" onclick="answer('activity', 'high')">🏃 Very active - daily runs/hikes</button>
+                        <button class="option" onclick="answer('activity', 'moderate')">🚶 Moderate - walks around neighborhood</button>
+                        <button class="option" onclick="answer('activity', 'low')">🛋️ Low - prefer relaxing at home</button>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question" data-q="3">
+                    <h3>3. Do you have kids or other pets?</h3>
+                    <div class="options">
+                        <button class="option" onclick="answer('family', 'kids')">👶 Kids in the home</button>
+                        <button class="option" onclick="answer('family', 'pets')">🐕 Other pets already</button>
+                        <button class="option" onclick="answer('family', 'none')">👤 Just me</button>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question" data-q="4">
+                    <h3>4. Experience level with pets?</h3>
+                    <div class="options">
+                        <button class="option" onclick="answer('experience', 'expert')">🌟 Expert - raised many pets</button>
+                        <button class="option" onclick="answer('experience', 'some')">⭐ Some experience</button>
+                        <button class="option" onclick="answer('experience', 'first')">🆕 First-time pet owner</button>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question" data-q="5">
+                    <h3>5. Dog or Cat preference?</h3>
+                    <div class="options">
+                        <button class="option" onclick="answer('type', 'dog')">🐕 Dog lover</button>
+                        <button class="option" onclick="answer('type', 'cat')">🐱 Cat person</button>
+                        <button class="option" onclick="answer('type', 'either')">💖 Love both</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results" id="results">
+                <h2>🎉 We Found Your Match!</h2>
+                <div id="matchContent"></div>
+                <a href="app.html" class="btn">Browse All Pets</a>
+                <a href="index.html" class="btn" style="background:#666; margin-left:10px;">Back Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const answers = {};
+        let currentQ = 1;
+        const totalQ = 5;
+
+        function answer(category, value) {
+            answers[category] = value;
+            
+            // Update progress
+            const progress = (currentQ / totalQ) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Hide current, show next
+            document.querySelector(`[data-q="${currentQ}"]`).classList.remove('active');
+            currentQ++;
+            
+            if (currentQ <= totalQ) {
+                document.querySelector(`[data-q="${currentQ}"]`).classList.add('active');
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.querySelector('.progress').style.display = 'none';
+            document.querySelector('.subtitle').style.display = 'none';
+            
+            // Simple matching logic
+            let match = {};
+            
+            if (answers.type === 'dog' || (answers.type === 'either' && answers.activity === 'high')) {
+                match = {
+                    name: "Luna",
+                    breed: "Golden Retriever Mix",
+                    image: "images/dog1.jpg",
+                    reason: "Luna is active, friendly, and great with families. Perfect for your lifestyle!"
+                };
+            } else {
+                match = {
+                    name: "Whiskers",
+                    breed: "Tabby Cat",
+                    image: "images/cat1.jpg",
+                    reason: "Whiskers is calm, low-maintenance, and loves indoor living. Ideal for you!"
+                };
+            }
+            
+            document.getElementById('matchContent').innerHTML = `
+                <div class="match-card">
+                    <img src="${match.image}" alt="${match.name}" class="match-image">
+                    <div class="match-name">${match.name}</div>
+                    <div style="color:#667eea; font-weight:bold; margin-bottom:10px;">${match.breed}</div>
+                    <div class="match-reason">${match.reason}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
