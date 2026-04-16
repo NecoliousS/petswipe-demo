@@ -17,6 +17,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding-bottom: 80px;
         }
 
         .header {
@@ -33,17 +34,6 @@
             font-weight: bold;
             color: #667eea;
             text-decoration: none;
-        }
-
-        .nav-btn {
-            background: #f0f0f0;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            color: #333;
         }
 
         .container {
@@ -253,18 +243,49 @@
             background: rgba(0,0,0,0.7);
             z-index: 999;
         }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+            transition: color 0.3s;
+        }
+
+        .nav-item span {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <a href="index.html" class="logo">🐾 PetSwipe</a>
-        <a href="index.html" class="nav-btn">← Back to Home</a>
+        <a href="index.html" class="nav-btn" style="background:#f0f0f0; padding:10px 20px; border-radius:20px; text-decoration:none; color:#333;">← Back</a>
     </div>
 
     <div class="container">
-        <div class="card-container" id="cardContainer">
-            <!-- Cards will be inserted here by JavaScript -->
-        </div>
+        <div class="card-container" id="cardContainer"></div>
 
         <div class="buttons" id="buttons">
             <button class="btn btn-nope" onclick="swipe('left')">✕</button>
@@ -275,9 +296,9 @@
 
         <div class="end-screen" id="endScreen">
             <h2>🎉 You've seen all pets!</h2>
-            <p>Take our matching quiz to find your perfect companion.</p>
-            <a href="quiz.html" class="end-btn">Take Quiz</a>
-            <a href="app.html" class="end-btn">Start Over</a>
+            <p>Check out more features or start over:</p>
+            <a href="quiz.html" class="end-btn">🎯 Retake Quiz</a>
+            <a href="app.html" class="end-btn">🔥 Start Over</a>
         </div>
     </div>
 
@@ -288,8 +309,14 @@
         <button class="close-popup" onclick="closePopup()">Keep Swiping</button>
     </div>
 
+    <div class="bottom-nav">
+        <a href="quiz.html" class="nav-item"><span>🎯</span>Quiz</a>
+        <a href="app.html" class="nav-item active"><span>🔥</span>Swipe</a>
+        <a href="ai.html" class="nav-item"><span>🤖</span>AI</a>
+        <a href="chat.html" class="nav-item"><span>💬</span>Chat</a>
+    </div>
+
     <script>
-        // Your 2 pets data
         const pets = [
             {
                 name: "Luna",
@@ -312,7 +339,6 @@
         function init() {
             const container = document.getElementById('cardContainer');
             
-            // Create cards in reverse order so first one is on top
             for (let i = pets.length - 1; i >= 0; i--) {
                 const card = createCard(pets[i], i);
                 container.appendChild(card);
@@ -385,7 +411,6 @@
             document.getElementById('matchPopup').style.display = 'none';
         }
 
-        // Initialize when page loads
         init();
     </script>
 </body>
