@@ -150,25 +150,33 @@
             background: #667eea;
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 30px;
             border-radius: 30px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            margin-top: 20px;
+            margin: 10px 5px;
         }
 
         .btn:hover {
             background: #5568d3;
             transform: translateY(-2px);
         }
+
+        .nav-btn {
+            background: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <a href="index.html" class="logo">🐾 PetSwipe</a>
-        <a href="index.html" class="nav-btn" style="background:#f0f0f0; padding:10px 20px; border-radius:20px; text-decoration:none; color:#333;">← Back</a>
+        <a href="index.html" class="nav-btn">← Back to Home</a>
     </div>
 
     <div class="container">
@@ -181,7 +189,6 @@
             </div>
 
             <div id="questionContainer">
-                <!-- Question 1 -->
                 <div class="question active" data-q="1">
                     <h3>1. Do you have a yard or outdoor space?</h3>
                     <div class="options">
@@ -191,7 +198,6 @@
                     </div>
                 </div>
 
-                <!-- Question 2 -->
                 <div class="question" data-q="2">
                     <h3>2. How active are you?</h3>
                     <div class="options">
@@ -201,7 +207,6 @@
                     </div>
                 </div>
 
-                <!-- Question 3 -->
                 <div class="question" data-q="3">
                     <h3>3. Do you have kids or other pets?</h3>
                     <div class="options">
@@ -211,7 +216,6 @@
                     </div>
                 </div>
 
-                <!-- Question 4 -->
                 <div class="question" data-q="4">
                     <h3>4. Experience level with pets?</h3>
                     <div class="options">
@@ -221,7 +225,6 @@
                     </div>
                 </div>
 
-                <!-- Question 5 -->
                 <div class="question" data-q="5">
                     <h3>5. Dog or Cat preference?</h3>
                     <div class="options">
@@ -235,8 +238,10 @@
             <div class="results" id="results">
                 <h2>🎉 We Found Your Match!</h2>
                 <div id="matchContent"></div>
-                <a href="app.html" class="btn">Browse All Pets</a>
-                <a href="index.html" class="btn" style="background:#666; margin-left:10px;">Back Home</a>
+                <p style="margin:20px 0; color:#666;">Want to see more pets? Check out all our features:</p>
+                <a href="app.html" class="btn" style="background:#ff6b6b;">🔥 Start Swiping</a>
+                <a href="ai.html" class="btn" style="background:#4ade80;">🤖 Ask AI</a>
+                <a href="chat.html" class="btn">💬 Community</a>
             </div>
         </div>
     </div>
@@ -249,11 +254,9 @@
         function answer(category, value) {
             answers[category] = value;
             
-            // Update progress
             const progress = (currentQ / totalQ) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
             
-            // Hide current, show next
             document.querySelector(`[data-q="${currentQ}"]`).classList.remove('active');
             currentQ++;
             
@@ -270,7 +273,6 @@
             document.querySelector('.progress').style.display = 'none';
             document.querySelector('.subtitle').style.display = 'none';
             
-            // Simple matching logic
             let match = {};
             
             if (answers.type === 'dog' || (answers.type === 'either' && answers.activity === 'high')) {
