@@ -1,417 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetSwipe - Find Your Match</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 80px;
-        }
-
-        .header {
-            background: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-        }
-
-        .card-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            height: 500px;
-        }
-
-        .card {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            overflow: hidden;
-            transition: transform 0.3s;
-            cursor: grab;
-        }
-
-        .card-image {
-            width: 100%;
-            height: 70%;
-            object-fit: cover;
-        }
-
-        .card-info {
-            padding: 20px;
-        }
-
-        .pet-name {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .pet-breed {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .pet-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background: #e0e7ff;
-            color: #667eea;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: none;
-            font-size: 30px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn:hover {
-            transform: scale(1.1);
-        }
-
-        .btn-nope {
-            background: #ff6b6b;
-            color: white;
-            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
-        }
-
-        .btn-like {
-            background: #4ade80;
-            color: white;
-            box-shadow: 0 5px 15px rgba(74,222,128,0.4);
-        }
-
-        .counter {
-            color: white;
-            margin-top: 20px;
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .end-screen {
-            display: none;
-            text-align: center;
-            color: white;
-            padding: 40px;
-        }
-
-        .end-screen h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .end-screen p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .end-btn {
-            background: white;
-            color: #667eea;
-            padding: 15px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-            margin: 10px;
-        }
-
-        .swipe-right {
-            animation: swipeRight 0.5s forwards;
-        }
-
-        .swipe-left {
-            animation: swipeLeft 0.5s forwards;
-        }
-
-        @keyframes swipeRight {
-            to {
-                transform: translateX(150%) rotate(30deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes swipeLeft {
-            to {
-                transform: translateX(-150%) rotate(-30deg);
-                opacity: 0;
-            }
-        }
-
-        .match-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            z-index: 1000;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 90%;
-            width: 400px;
-        }
-
-        .match-popup h3 {
-            color: #667eea;
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        .match-popup p {
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .close-popup {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 999;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            z-index: 100;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #666;
-            font-size: 12px;
-            text-align: center;
-            transition: color 0.3s;
-        }
-
-        .nav-item span {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .nav-item.active {
-            color: #ff6b6b;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <a href="index.html" class="logo">🐾 PetSwipe</a>
-        <a href="index.html" class="nav-btn" style="background:#f0f0f0; padding:10px 20px; border-radius:20px; text-decoration:none; color:#333;">← Back</a>
-    </div>
-
-    <div class="container">
-        <div class="card-container" id="cardContainer"></div>
-
-        <div class="buttons" id="buttons">
-            <button class="btn btn-nope" onclick="swipe('left')">✕</button>
-            <button class="btn btn-like" onclick="swipe('right')">♥</button>
-        </div>
-
-        <div class="counter" id="counter">Pet 1 of 2</div>
-
-        <div class="end-screen" id="endScreen">
-            <h2>🎉 You've seen all pets!</h2>
-            <p>Check out more features or start over:</p>
-            <a href="quiz.html" class="end-btn">🎯 Retake Quiz</a>
-            <a href="app.html" class="end-btn">🔥 Start Over</a>
-        </div>
-    </div>
-
-    <div class="overlay" id="overlay" onclick="closePopup()"></div>
-    <div class="match-popup" id="matchPopup">
-        <h3>💝 Interest Sent!</h3>
-        <p>We've noted your interest! In the full app, the shelter would receive your info.</p>
-        <button class="close-popup" onclick="closePopup()">Keep Swiping</button>
-    </div>
-
-    <div class="bottom-nav">
-        <a href="quiz.html" class="nav-item"><span>🎯</span>Quiz</a>
-        <a href="app.html" class="nav-item active"><span>🔥</span>Swipe</a>
-        <a href="ai.html" class="nav-item"><span>🤖</span>AI</a>
-        <a href="chat.html" class="nav-item"><span>💬</span>Chat</a>
-    </div>
-
-    <script>
-        const pets = [
-            {
-                name: "Luna",
-                breed: "Golden Retriever Mix",
-                age: "2 years",
-                tags: ["Playful", "Good with kids", "Active"],
-                image: "images/dog1.jpg"
-            },
-            {
-                name: "Whiskers",
-                breed: "Tabby Cat",
-                age: "1 year",
-                tags: ["Calm", "Indoor", "Affectionate"],
-                image: "images/cat1.jpg"
-            }
-        ];
-
-        let currentIndex = 0;
-
-        function init() {
-            const container = document.getElementById('cardContainer');
-            
-            for (let i = pets.length - 1; i >= 0; i--) {
-                const card = createCard(pets[i], i);
-                container.appendChild(card);
-            }
-            
-            updateCounter();
-        }
-
-        function createCard(pet, index) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.id = `card-${index}`;
-            card.innerHTML = `
-                <img src="${pet.image}" alt="${pet.name}" class="card-image">
-                <div class="card-info">
-                    <div class="pet-name">${pet.name}, ${pet.age}</div>
-                    <div class="pet-breed">${pet.breed}</div>
-                    <div class="pet-tags">
-                        ${pet.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                </div>
-            `;
-            return card;
-        }
-
-        function swipe(direction) {
-            if (currentIndex >= pets.length) return;
-            
-            const card = document.getElementById(`card-${currentIndex}`);
-            
-            if (direction === 'right') {
-                card.classList.add('swipe-right');
-                setTimeout(() => showMatchPopup(), 300);
-            } else {
-                card.classList.add('swipe-left');
-            }
-            
-            currentIndex++;
-            updateCounter();
-            
-            setTimeout(() => {
-                if (currentIndex >= pets.length) {
-                    showEndScreen();
-                }
-            }, 500);
-        }
-
-        function updateCounter() {
-            const counter = document.getElementById('counter');
-            if (currentIndex < pets.length) {
-                counter.textContent = `Pet ${currentIndex + 1} of ${pets.length}`;
-            } else {
-                counter.style.display = 'none';
-            }
-        }
-
-        function showEndScreen() {
-            document.getElementById('cardContainer').style.display = 'none';
-            document.getElementById('buttons').style.display = 'none';
-            document.getElementById('endScreen').style.display = 'block';
-        }
-
-        function showMatchPopup() {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('matchPopup').style.display = 'block';
-        }
-
-        function closePopup() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('matchPopup').style.display = 'none';
-        }
-
-        init();
-    </script>
-</body>
-</html>
+const pets = [
+    {
+        name: "Luna",
+        breed: "Golden Retriever",
+        age: "2 years",
+        tags: ["Playful", "Good with kids", "Active"],
+        image: "images/dog1.jpg"
+    },
+    {
+        name: "Max",
+        breed: "German Shepherd",
+        age: "3 years",
+        tags: ["Loyal", "Protective", "Smart"],
+        image: "images/dog2.jpg"
+    },
+    {
+        name: "Bella",
+        breed: "Beagle",
+        age: "1 year",
+        tags: ["Curious", "Friendly", "Small"],
+        image: "images/dog3.jpg"
+    },
+    {
+        name: "Charlie",
+        breed: "Labrador Mix",
+        age: "4 years",
+        tags: ["Gentle", "Calm", "Trained"],
+        image: "images/dog4.jpg"
+    },
+    {
+        name: "Cooper",
+        breed: "Australian Shepherd",
+        age: "2 years",
+        tags: ["Energetic", "Smart", "Herder"],
+        image: "images/dog5.jpg"
+    },
+    {
+        name: "Daisy",
+        breed: "Corgi",
+        age: "1 year",
+        tags: ["Cute", "Playful", "Apartment"],
+        image: "images/dog6.jpg"
+    },
+    {
+        name: "Rocky",
+        breed: "Pitbull Mix",
+        age: "3 years",
+        tags: ["Sweet", "Loyal", "Strong"],
+        image: "images/dog7.jpg"
+    },
+    {
+        name: "Bailey",
+        breed: "Border Collie",
+        age: "2 years",
+        tags: ["Athletic", "Smart", "Agility"],
+        image: "images/dog8.jpg"
+    },
+    {
+        name: "Teddy",
+        breed: "Poodle Mix",
+        age: "5 years",
+        tags: ["Hypoallergenic", "Gentle", "Senior"],
+        image: "images/dog9.jpg"
+    },
+    {
+        name: "Milo",
+        breed: "Dachshund",
+        age: "1 year",
+        tags: ["Small", "Brave", "Cuddly"],
+        image: "images/dog10.jpg"
+    },
+    {
+        name: "Whiskers",
+        breed: "Tabby",
+        age: "1 year",
+        tags: ["Calm", "Indoor", "Affectionate"],
+        image: "images/cat1.jpg"
+    },
+    {
+        name: "Oliver",
+        breed: "Orange Tabby",
+        age: "2 years",
+        tags: ["Talkative", "Friendly", "Lazy"],
+        image: "images/cat2.jpg"
+    },
+    {
+        name: "Leo",
+        breed: "Maine Coon",
+        age: "3 years",
+        tags: ["Fluffy", "Gentle Giant", "Indoor"],
+        image: "images/cat3.jpg"
+    },
+    {
+        name: "Mittens",
+        breed: "Tuxedo Cat",
+        age: "1 year",
+        tags: ["Playful", "Curious", "Funny"],
+        image: "images/cat4.jpg"
+    },
+    {
+        name: "Simba",
+        breed: "Siamese",
+        age: "4 years",
+        tags: ["Vocal", "Smart", "Clingy"],
+        image: "images/cat5.jpg"
+    },
+    {
+        name: "Lily",
+        breed: "Persian",
+        age: "2 years",
+        tags: ["Fluffy", "Quiet", "Grooming"],
+        image: "images/cat6.jpg"
+    },
+    {
+        name: "Shadow",
+        breed: "Black Cat",
+        age: "1 year",
+        tags: ["Mysterious", "Sweet", "Lucky"],
+        image: "images/cat7.jpg"
+    },
+    {
+        name: "Chloe",
+        breed: "Ragdoll",
+        age: "3 years",
+        tags: ["Relaxed", "Floppy", "Blue Eyes"],
+        image: "images/cat8.jpg"
+    },
+    {
+        name: "Jack",
+        breed: "Bengal",
+        age: "2 years",
+        tags: ["Wild", "Active", "Spotted"],
+        image: "images/cat9.jpg"
+    },
+    {
+        name: "Sophie",
+        breed: "Calico",
+        age: "5 years",
+        tags: ["Independent", "Sassy", "Beautiful"],
+        image: "images/cat10.jpg"
+    }
+];
